@@ -7,6 +7,11 @@ import java.util.List;
 public interface CandyService {
     List<Candys> findAllcandys();
 
-    public int findcandysByid(int id);
+    public Candys findcandysByid(Integer id);
 
+    public int insert(Candys candys);
+
+    public int update(Candys candys);
+
+    public int delete(Integer id);
 }

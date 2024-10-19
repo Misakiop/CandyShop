@@ -19,7 +19,23 @@ public class CandyServiceImp implements CandyService {
     }
 
     @Override
-    public int findcandysByid(int id) {
+    public Candys findcandysByid(Integer id) {
         return this.candysMapper.findcandysByid(id);
     }
+
+    @Override
+    public int insert(Candys candys){
+        return this.candysMapper.insert(candys);
+    }
+
+    @Override
+    public int update(Candys candys){
+        return this.candysMapper.update(candys);
+    }
+
+    @Override
+    public int delete(Integer id){
+        return this.candysMapper.delete(id);
+    }
+
 }
