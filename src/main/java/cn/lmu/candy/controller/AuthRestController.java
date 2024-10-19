@@ -41,7 +41,7 @@ public class AuthRestController {
         }else{
             responseData.setMsg("用户名或密码错误");
             responseData.setSuccess(false);
-            responseData.setCode(400);
+            responseData.setCode(404);
         }
         return responseData;
     }
