@@ -35,13 +35,13 @@ public class AuthRestController {
         UserInfo userInfo = authService.login(username, password);
         if(userInfo!=null && userInfo.getToken().length()>0)
         {responseData.setData(userInfo);
-            responseData.setMsg("login success");
+            responseData.setMsg("登录成功");
             responseData.setSuccess(true);
             responseData.setCode(200);
         }else{
-            responseData.setMsg("login failed");
+            responseData.setMsg("用户名或密码错误");
             responseData.setSuccess(false);
-            responseData.setCode(200);
+            responseData.setCode(400);
         }
         return responseData;
     }
