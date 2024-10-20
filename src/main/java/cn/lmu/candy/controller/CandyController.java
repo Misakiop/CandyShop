@@ -35,12 +35,12 @@ public class CandyController {
                 responseData.setMsg("查询成功");
             } else {
                 responseData.setSuccess(false);
-                responseData.setCode(404);
-                responseData.setMsg("文章未找到");
+                responseData.setCode(400);
+                responseData.setMsg("商品未找到");
             }
         } catch (Exception e) {
             responseData.setSuccess(false);
-            responseData.setCode(500);
+//            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
             // 可以在这里添加日志记录
         }
@@ -48,34 +48,7 @@ public class CandyController {
         return responseData;
     }
 
-    //插入数据
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResponseData<Candys> insertCandy(@RequestBody Candys candy) {
-        ResponseData<Candys> responseData = new ResponseData<>();
 
-        try {
-            // 调用 service 层的 insert 方法
-            int result = candyService.insert(candy);
-
-            if (result > 0) {
-                responseData.setData(candy); // 插入成功后返回插入的对象
-                responseData.setSuccess(true);
-                responseData.setCode(200);
-                responseData.setMsg("插入成功");
-            } else {
-                responseData.setSuccess(false);
-                responseData.setCode(500);
-                responseData.setMsg("插入失败");
-            }
-        } catch (Exception e) {
-            responseData.setSuccess(false);
-            responseData.setCode(500);
-            responseData.setMsg("服务器错误: " + e.getMessage());
-            // 可以在这里添加日志记录
-        }
-
-        return responseData;
-    }
 
     //修改数据
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
@@ -90,15 +63,15 @@ public class CandyController {
                 responseData.setData(candy); // 更新成功后返回更新的对象
                 responseData.setSuccess(true);
                 responseData.setCode(200);
-                responseData.setMsg("更新成功");
+                responseData.setMsg("修改成功");
             } else {
                 responseData.setSuccess(false);
-                responseData.setCode(404);
-                responseData.setMsg("未找到要更新的记录");
+                responseData.setCode(400);
+                responseData.setMsg("修改失败");
             }
         } catch (Exception e) {
             responseData.setSuccess(false);
-            responseData.setCode(500);
+//            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
             // 可以在这里添加日志记录
         }
@@ -106,31 +79,6 @@ public class CandyController {
         return responseData;
     }
 
-    //删除数据
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseData<Void> deleteCandy(@PathVariable("id") Integer id) {
-        ResponseData<Void> responseData = new ResponseData<>();
 
-        try {
-            int result = candyService.delete(id);
-
-            if (result > 0) {
-                responseData.setSuccess(true);
-                responseData.setCode(200);
-                responseData.setMsg("删除成功");
-            } else {
-                responseData.setSuccess(false);
-                responseData.setCode(404);
-                responseData.setMsg("未找到要删除的糖果记录");
-            }
-        } catch (Exception e) {
-            responseData.setSuccess(false);
-            responseData.setCode(500);
-            responseData.setMsg("服务器错误: " + e.getMessage());
-            // 可以在这里添加日志记录
-        }
-
-        return responseData;
-    }
 }
 

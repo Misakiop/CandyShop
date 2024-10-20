@@ -30,6 +30,20 @@ public interface UserInfoMapper {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public int add(UserInfo user);
 
+    //保存用户信息
+//    @Insert("insert into db_candy.user(username, password, gender, email, telephone, introduce, state, registTime,lastPasswordResetDate)" +
+//            "values (#{username},#{password},#{gender},#{email},#{telephone},#{introduce},#{state},#{registTime},#{lastPasswordResetDate})")
+    @Update("update db_candy.user set username=#{username},gender=#{gender},email=#{email},telephone=#{telephone},introduce=#{introduce},registTime=#{registTime},lastPasswordResetDate=#{lastPasswordResetDate} where id=#{id}")
+    public int updateUser(UserInfo user);
+
+    //修改账号密码(admin)
+    @Update("update db_candy.user set username=#{username},password=#{password} where id=#{id}")
+    public int updatenamepass(UserInfo user);
+
+    //修改密码(user)
+    @Update("update db_candy.user set password=#{password} where id=#{id}")
+    public int updatepassword(UserInfo user);
+
     //保存用户角色
     @Insert("<script>" +
             "INSERT INTO user_role" +
@@ -41,10 +55,14 @@ public interface UserInfoMapper {
             "</script>")
     public int addUserRole(@Param("user") UserInfo user);
 
+
     @Select("select * from role where id in(select  role_id from user_role where  user_id=#{userId})")
     @Results(id = "RoleMap",value = {
             @Result(property = "id",column = "id"),
             @Result(property = "roleName",column = "roleName"),
             @Result(property = "roleDesc",column = "roleDesc")})
     public List<Role> findRolesByUserId(int userId);
+
+    @Delete("delete from db_candy.user where id=#{id}")
+    public int deleteUser(Integer id);
 }
