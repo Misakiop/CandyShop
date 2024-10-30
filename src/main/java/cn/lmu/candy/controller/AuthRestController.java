@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 完成登录注册
+ */
 @RestController
 @RequestMapping("api/auth")
 public class AuthRestController {
@@ -24,7 +27,12 @@ public class AuthRestController {
     @Autowired
     private UserAuthService authService;
 
-
+    /**
+     * 用户登录
+     * @param params
+     * @return
+     * @throws AuthenticationException
+     */
     @CrossOrigin(origins = "*")
     @RequestMapping(value = "/login", method = { RequestMethod.POST,RequestMethod.GET})
     public ResponseData loginForToken(@RequestBody Map<String,Object> params)
@@ -61,6 +69,12 @@ public class AuthRestController {
     }
 
 
+    /**
+     * 注册
+     * @param params
+     * @return
+     * @throws AuthenticationException
+     */
     @CrossOrigin(origins = "*")
     @RequestMapping(value = "/register", method = {RequestMethod.POST})
     @ResponseBody

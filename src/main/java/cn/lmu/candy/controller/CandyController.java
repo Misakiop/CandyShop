@@ -8,20 +8,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 商品API接口
+ */
 @RestController
 @RequestMapping("/api/candy")
 public class CandyController {
     @Autowired
     private CandyService candyService;
 
-    //获取全部数据
+    /**
+     * 获取全部数据
+     * @return
+     */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<Candys> getCandyList() {
         List<Candys> candyList = this.candyService.findAllcandys();
         return candyList;
     }
 
-    //通过id获取数据
+    /**
+     * 通过id获取数据
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/select/{id}", method = RequestMethod.GET)
     public ResponseData<Candys> getById(@PathVariable("id") Integer id) {
         ResponseData<Candys> responseData = new ResponseData<>();
@@ -48,9 +58,12 @@ public class CandyController {
         return responseData;
     }
 
-
-
-    //修改数据
+    /**
+     * 修改数据
+     * @param id
+     * @param candy
+     * @return
+     */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     public ResponseData<Candys> updateCandy(@PathVariable("id") Integer id, @RequestBody Candys candy) {
         ResponseData<Candys> responseData = new ResponseData<>();

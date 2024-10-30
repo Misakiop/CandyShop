@@ -1,7 +1,6 @@
 package cn.lmu.candy.controller;
 
 import cn.lmu.candy.domain.ResponseData;
-import cn.lmu.candy.domain.Role;
 import cn.lmu.candy.domain.UserInfo;
 import cn.lmu.candy.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,20 +8,30 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 用户API接口
+ */
 @RestController
 @RequestMapping("/api/user")
 public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
-    //获取全部用户数据
+    /**
+     * 获取全部用户数据
+     * @return
+     */
     @RequestMapping(value = "/userlist", method = RequestMethod.GET)
     public List<UserInfo> getUserList() {
         List<UserInfo> userInfoListlist = this.userInfoService.findAll();
         return userInfoListlist;
     }
 
-    //通过id获取数据
+    /**
+     * 通过id获取数据
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/select/{id}", method = RequestMethod.GET)
     public ResponseData<UserInfo> getUserInfoById(@PathVariable("id") Integer id) {
         ResponseData<UserInfo> responseData = new ResponseData();
@@ -47,7 +56,11 @@ public class UserInfoController {
         return responseData;
     }
 
-    //通过name获取数据
+    /**
+     * 通过name获取数据
+     * @param username
+     * @return
+     */
     @RequestMapping(value = "/select/{username}", method = RequestMethod.GET)
     public ResponseData<UserInfo> getUserInfoByName(@PathVariable("username") String username) {
         ResponseData<UserInfo> responseData = new ResponseData();
@@ -72,7 +85,12 @@ public class UserInfoController {
         return responseData;
     }
 
-    //完善用户信息
+    /**
+     * 完善用户信息
+     * @param id
+     * @param userInfo
+     * @return
+     */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     public ResponseData<UserInfo> updateUserInfo(@PathVariable("id") Integer id, @RequestBody UserInfo userInfo) {
         ResponseData<UserInfo> responseData = new ResponseData();
@@ -99,7 +117,12 @@ public class UserInfoController {
         return responseData;
     }
 
-    //用户修改密码
+    /**
+     * 用户修改密码
+     * @param id
+     * @param userInfo
+     * @return
+     */
     @RequestMapping(value = "/updatepassword/{id}", method = RequestMethod.PUT)
     public ResponseData<UserInfo> updateUserpass(@PathVariable("id") Integer id, @RequestBody UserInfo userInfo) {
         ResponseData<UserInfo> responseData = new ResponseData();
@@ -126,8 +149,11 @@ public class UserInfoController {
         return responseData;
     }
 
-
-    //删除数据
+    /**
+     * 删除数据
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseData<Void> deleteUserInfo(@PathVariable("id") Integer id) {
         ResponseData<Void> responseData = new ResponseData();

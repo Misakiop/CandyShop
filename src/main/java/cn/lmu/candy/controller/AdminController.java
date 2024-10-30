@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 商品控制层
+ * 管理员API接口
  */
 @RestController
 @RequestMapping(value = "/api/admin")
@@ -21,7 +21,7 @@ public class AdminController {
     private UserInfoService userInfoService;
 
     /**
-     *添加商品
+     * 添加商品
      * @param candy
      * @return
      */
@@ -85,8 +85,11 @@ public class AdminController {
         return responseData;
     }
 
-
-    //删除商品数据
+    /**
+     * 删除商品数据
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/deleteshop/{id}", method = RequestMethod.DELETE)
     public ResponseData<Void> deleteCandy(@PathVariable("id") Integer id) {
         ResponseData<Void> responseData = new ResponseData<>();
@@ -113,8 +116,11 @@ public class AdminController {
         return responseData;
     }
 
-
-    //删除用户数据
+    /**
+     * 删除用户数据
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/deleteuser/{id}",method = RequestMethod.DELETE)
     public ResponseData<Void> deleteUserInfo(@PathVariable("id") Integer id){
         ResponseData<Void> responseData = new ResponseData();
