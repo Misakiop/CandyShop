@@ -2,11 +2,13 @@ package cn.lmu.candy.controller;
 
 import cn.lmu.candy.domain.ResponseData;
 import cn.lmu.candy.domain.UserInfo;
+import cn.lmu.candy.security.MyPasswordEncoder;
 import cn.lmu.candy.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户API接口
@@ -17,14 +19,36 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
+
     /**
      * 获取全部用户数据
      * @return
      */
     @RequestMapping(value = "/userlist", method = RequestMethod.GET)
-    public List<UserInfo> getUserList() {
-        List<UserInfo> userInfoListlist = this.userInfoService.findAll();
-        return userInfoListlist;
+    public ResponseData<List<UserInfo>> getUserList() {
+        ResponseData<List<UserInfo>> responseData = new ResponseData<>();
+
+        try {
+            List<UserInfo> userInfoList = this.userInfoService.findAll();
+            if (!userInfoList.isEmpty()) {
+                responseData.setData(userInfoList);
+                responseData.setSuccess(true);
+                responseData.setCode(200);
+                responseData.setMsg("查询成功");
+            } else {
+                // 如果没有数据，也可以视为一种"成功"，只是没有数据而已
+                responseData.setSuccess(true);
+                responseData.setCode(204); // 204 No Content 也可以用来表示没有内容的情况
+                responseData.setMsg("无用户数据");
+            }
+        } catch (Exception e) {
+            responseData.setSuccess(false);
+            responseData.setMsg("服务器错误: " + e.getMessage());
+            // 根据实际异常类型可以设置不同的错误码，这里简单设置为500
+            responseData.setCode(500);
+        }
+
+        return responseData;
     }
 
     /**
@@ -85,17 +109,13 @@ public class UserInfoController {
         return responseData;
     }
 
-    /**
-     * 完善用户信息
-     * @param id
-     * @param userInfo
-     * @return
-     */
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
-    public ResponseData<UserInfo> updateUserInfo(@PathVariable("id") Integer id, @RequestBody UserInfo userInfo) {
-        ResponseData<UserInfo> responseData = new ResponseData();
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseData<UserInfo> updateUserInfo(@RequestParam("id") Integer id, @RequestBody UserInfo userInfo) {
+        ResponseData<UserInfo> responseData = new ResponseData<>();
 
         try {
+            // 确保 userInfo 对象包含 id
+            userInfo.setId(id);
             int result = userInfoService.updateUser(userInfo);
 
             if (result > 0) {
@@ -110,7 +130,7 @@ public class UserInfoController {
             }
         } catch (Exception e) {
             responseData.setSuccess(false);
-//            responseData.setCode(500);
+            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
         }
 

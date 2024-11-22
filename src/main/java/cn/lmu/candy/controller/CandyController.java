@@ -22,9 +22,29 @@ public class CandyController {
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<Candys> getCandyList() {
-        List<Candys> candyList = this.candyService.findAllcandys();
-        return candyList;
+    public ResponseData<List<Candys>> getCandyList() {
+        ResponseData<List<Candys>> responseData = new ResponseData<>();
+
+        try {
+            List<Candys> candysList = this.candyService.findAllcandys();
+            if (!candysList.isEmpty()) {
+                responseData.setData(candysList);
+                responseData.setSuccess(true);
+                responseData.setCode(200);
+                responseData.setMsg("查询成功");
+            }else {
+                // 如果没有数据，也可以视为一种"成功"，只是没有数据而已
+                responseData.setSuccess(true);
+                responseData.setCode(204); // 204 No Content 也可以用来表示没有内容的情况
+                responseData.setMsg("无用户数据");
+            }
+        }catch (Exception e){
+            responseData.setSuccess(false);
+            responseData.setMsg("服务器错误: " + e.getMessage());
+            // 根据实际异常类型可以设置不同的错误码，这里简单设置为500
+            responseData.setCode(500);
+        }
+        return responseData;
     }
 
     /**
