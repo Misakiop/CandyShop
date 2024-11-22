@@ -83,7 +83,7 @@ public class AuthRestController {
         String password=params.get("password").toString();
         String code=params.get("code").toString();
         UserInfo user=new UserInfo();
-        user.setUserName(username);
+        user.setUsername(username);
         user.setPassword(password);
         Role role=new Role();
         role.setId(2);
@@ -95,10 +95,12 @@ public class AuthRestController {
         ResponseData<UserInfo> responseData = new ResponseData<UserInfo>();
         UserInfo addedUser=authService.register(user);
         if (addedUser != null) {
+            responseData.setCode(200);
             responseData.setSuccess(true);
             responseData.setMsg("注册用户成功！");
             responseData.setData(addedUser);
         } else {
+            responseData.setCode(400);
             responseData.setSuccess(false);
             responseData.setMsg("注册用户失败！");
         }
