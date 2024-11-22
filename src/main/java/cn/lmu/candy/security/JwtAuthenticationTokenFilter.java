@@ -50,7 +50,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     UserInfo userInfo =  this.userAuthService.findByUsername(userName);
                     org.springframework.security.core.userdetails.User user = null;
                     if (userInfo != null) {
-                        user = new  org.springframework.security.core.userdetails.User(userInfo.getUserName(), myPasswordEncoder.encode(userInfo.getPassword()),
+                        user = new  org.springframework.security.core.userdetails.User(userInfo.getUsername(), myPasswordEncoder.encode(userInfo.getPassword()),
                                 getAuthority(userInfo.getRoleList()));
                     }
                     UsernamePasswordAuthenticationToken authentication =
