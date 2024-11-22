@@ -33,18 +33,20 @@ public class MySecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // 关闭 CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/candy/**").permitAll()
-                        .requestMatchers("/api/user/**").permitAll()
+//                        .requestMatchers("/api/candy/**").permitAll()
+//                        .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 管理员角色才能访问管理模块
-                        .anyRequest().authenticated() // 任何路径都要进行拦截
+                        // 任何路径都要进行拦截
+                        .anyRequest().authenticated()
+                        // 任何路径都不进行拦截
+//                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(myAccessDeniedHandler)
                         .authenticationEntryPoint(myAuthenticationEntryPoint)
                 )
-//                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())); // 配置 CORS
 
         return http.build();
