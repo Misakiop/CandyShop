@@ -1,5 +1,6 @@
 package cn.lmu.candy.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.util.List;
 @JsonIgnoreProperties(value = "handler")
 public class UserInfo {
     private int id;
-    private String userName;
+    private String username;
     private String password;
     private String gender;
     private String email;
@@ -23,8 +24,9 @@ public class UserInfo {
     private String introduce;
     private int state;
     private List<Role> roleList;
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date registTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastPasswordResetDate;
     private String token;
 
