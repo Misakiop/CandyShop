@@ -54,20 +54,25 @@ public class AdminController {
     }
 
     /**
-     * 修改用户名和密码
+     * 修改商品数据
      * @param id
-     * @param userInfo
+     * @param candy
      * @return
      */
-    @RequestMapping(value = "/updatenamepass/{id}", method = RequestMethod.PUT)
-    public ResponseData<UserInfo> updatenamepass(@PathVariable("id") Integer id, @RequestBody UserInfo userInfo) {
-        ResponseData<UserInfo> responseData = new ResponseData();
+    @RequestMapping(value = "/updateshop", method = RequestMethod.PUT)
+    public ResponseData<Candys> updateCandy(@RequestParam("id") Integer id, @RequestBody Candys candy) {
+        ResponseData<Candys> responseData = new ResponseData<>();
 
         try {
-            int result = userInfoService.updatenamepass(userInfo);
+            // 设置ID，确保传入的candys对象包含正确的ID
+            candy.setId(id);
+
+            // 调用服务层更新数据
+            int result = candyService.update(candy);
 
             if (result > 0) {
-                responseData.setData(userInfo); // 更新成功后返回更新的对象
+                // 你可以考虑通过ID重新查询最新的数据并返回
+                responseData.setData(candy); // 更新成功后返回更新的对象
                 responseData.setSuccess(true);
                 responseData.setCode(200);
                 responseData.setMsg("修改成功");
@@ -77,9 +82,50 @@ public class AdminController {
                 responseData.setMsg("修改失败");
             }
         } catch (Exception e) {
+            // 异常处理，返回500错误
             responseData.setSuccess(false);
 //            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
+            // 可以在这里添加日志记录
+        }
+
+        return responseData;
+    }
+
+    /**
+     * 修改商品状态
+     * @param id
+     * @param candy
+     * @return
+     */
+    @RequestMapping(value = "/updatestate", method = RequestMethod.PUT)
+    public ResponseData<Candys> updateCandystate(@RequestParam("id") Integer id, @RequestBody Candys candy) {
+        ResponseData<Candys> responseData = new ResponseData<>();
+
+        try {
+            // 设置ID，确保传入的candys对象包含正确的ID
+            candy.setId(id);
+
+            // 调用服务层更新数据
+            int result = candyService.updatestate(candy);
+
+            if (result > 0) {
+                // 你可以考虑通过ID重新查询最新的数据并返回
+                responseData.setData(candy); // 更新成功后返回更新的对象
+                responseData.setSuccess(true);
+                responseData.setCode(200);
+                responseData.setMsg("修改成功");
+            } else {
+                responseData.setSuccess(false);
+                responseData.setCode(400);
+                responseData.setMsg("修改失败");
+            }
+        } catch (Exception e) {
+            // 异常处理，返回500错误
+            responseData.setSuccess(false);
+//            responseData.setCode(500);
+            responseData.setMsg("服务器错误: " + e.getMessage());
+            // 可以在这里添加日志记录
         }
 
         return responseData;
@@ -116,35 +162,40 @@ public class AdminController {
         return responseData;
     }
 
+//    用户部分--------------------------------------------------------------------------------
+
     /**
-     * 删除用户数据
+     * 修改用户
      * @param id
+     * @param userInfo
      * @return
      */
-    @RequestMapping(value = "/deleteuser/{id}",method = RequestMethod.DELETE)
-    public ResponseData<Void> deleteUserInfo(@PathVariable("id") Integer id){
-        ResponseData<Void> responseData = new ResponseData();
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseData<UserInfo> updateUserInfo(@RequestParam("id") Integer id, @RequestBody UserInfo userInfo) {
+        ResponseData<UserInfo> responseData = new ResponseData<>();
 
-        try{
-            int result = userInfoService.deleteUser(id);
+        try {
+            // 确保 userInfo 对象包含 id
+            userInfo.setId(id);
+            int result = userInfoService.updateUser(userInfo);
 
-            if(result > 0){
+            if (result > 0) {
+                responseData.setData(userInfo); // 更新成功后返回更新的对象
                 responseData.setSuccess(true);
                 responseData.setCode(200);
-                responseData.setMsg("删除成功");
-            }else {
+                responseData.setMsg("修改成功");
+            } else {
                 responseData.setSuccess(false);
                 responseData.setCode(400);
-                responseData.setMsg("删除失败");
-
+                responseData.setMsg("修改失败");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             responseData.setSuccess(false);
-//            responseData.setCode(500);
+            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
-            // 可以在这里添加日志记录
         }
 
         return responseData;
     }
+
 }

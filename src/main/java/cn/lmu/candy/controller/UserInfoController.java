@@ -4,6 +4,7 @@ import cn.lmu.candy.domain.ResponseData;
 import cn.lmu.candy.domain.UserInfo;
 import cn.lmu.candy.security.MyPasswordEncoder;
 import cn.lmu.candy.service.UserInfoService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +20,22 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
-
     /**
      * 获取全部用户数据
      * @return
      */
     @RequestMapping(value = "/userlist", method = RequestMethod.GET)
-    public ResponseData<List<UserInfo>> getUserList() {
-        ResponseData<List<UserInfo>> responseData = new ResponseData<>();
+    public ResponseData<PageInfo<UserInfo>> getUserList(
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize)
+     {
+        ResponseData<PageInfo<UserInfo>> responseData = new ResponseData<>();
 
         try {
-            List<UserInfo> userInfoList = this.userInfoService.findAll();
-            if (!userInfoList.isEmpty()) {
-                responseData.setData(userInfoList);
+            PageInfo<UserInfo> pageInfo = this.userInfoService.findAlluser(pageNum, pageSize);
+//            List<UserInfo> userInfoList = this.userInfoService.findAll();
+            if (pageInfo != null && !pageInfo.getList().isEmpty()) {
+                responseData.setData(pageInfo);
                 responseData.setSuccess(true);
                 responseData.setCode(200);
                 responseData.setMsg("查询成功");
@@ -85,7 +89,7 @@ public class UserInfoController {
      * @param username
      * @return
      */
-    @RequestMapping(value = "/select/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/selectbyname/{username}", method = RequestMethod.GET)
     public ResponseData<UserInfo> getUserInfoByName(@PathVariable("username") String username) {
         ResponseData<UserInfo> responseData = new ResponseData();
 
@@ -103,66 +107,6 @@ public class UserInfoController {
             }
         } catch (Exception e) {
             responseData.setSuccess(false);
-            responseData.setMsg("服务器错误: " + e.getMessage());
-        }
-
-        return responseData;
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseData<UserInfo> updateUserInfo(@RequestParam("id") Integer id, @RequestBody UserInfo userInfo) {
-        ResponseData<UserInfo> responseData = new ResponseData<>();
-
-        try {
-            // 确保 userInfo 对象包含 id
-            userInfo.setId(id);
-            int result = userInfoService.updateUser(userInfo);
-
-            if (result > 0) {
-                responseData.setData(userInfo); // 更新成功后返回更新的对象
-                responseData.setSuccess(true);
-                responseData.setCode(200);
-                responseData.setMsg("修改成功");
-            } else {
-                responseData.setSuccess(false);
-                responseData.setCode(400);
-                responseData.setMsg("修改失败");
-            }
-        } catch (Exception e) {
-            responseData.setSuccess(false);
-            responseData.setCode(500);
-            responseData.setMsg("服务器错误: " + e.getMessage());
-        }
-
-        return responseData;
-    }
-
-    /**
-     * 用户修改密码
-     * @param id
-     * @param userInfo
-     * @return
-     */
-    @RequestMapping(value = "/updatepassword/{id}", method = RequestMethod.PUT)
-    public ResponseData<UserInfo> updateUserpass(@PathVariable("id") Integer id, @RequestBody UserInfo userInfo) {
-        ResponseData<UserInfo> responseData = new ResponseData();
-
-        try {
-            int result = userInfoService.updatepassword(userInfo);
-
-            if (result > 0) {
-                responseData.setData(userInfo); // 更新成功后返回更新的对象
-                responseData.setSuccess(true);
-                responseData.setCode(200);
-                responseData.setMsg("修改成功");
-            } else {
-                responseData.setSuccess(false);
-                responseData.setCode(400);
-                responseData.setMsg("修改失败");
-            }
-        } catch (Exception e) {
-            responseData.setSuccess(false);
-//            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
         }
 

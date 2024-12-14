@@ -81,7 +81,7 @@ public class AuthRestController {
     public ResponseData register(@RequestBody Map<String,Object> params) throws AuthenticationException {
         String username=params.get("username").toString();
         String password=params.get("password").toString();
-        String code=params.get("code").toString();
+//        String code=params.get("code").toString();
         UserInfo user=new UserInfo();
         user.setUsername(username);
         user.setPassword(password);
