@@ -9,7 +9,6 @@ import java.util.List;
 @Mapper
 public interface CandyMapper {
     @Select("SELECT * FROM db_candy.candys")
-    @ResultMap("CandyMap")
     public List<Candys> findAllcandys();
 
     @Select("select * from db_candy.candys where id=#{id}")
@@ -21,18 +20,36 @@ public interface CandyMapper {
             @Result(property = "price", column = "price"),
             @Result(property = "addtime", column = "addtime"),
             @Result(property = "imguid", column = "imguid"),
-//          @Result(property = "candyList",column = "id",
-//                    many = @Many(select = "com.example.article_api.dao.CommentMapper.getCommentsByAid"
-//                            ,fetchType = FetchType.EAGER))
     })
     public Candys findcandysByid(Integer id);
 
-    @Insert("insert into db_candy.candys(id,name,comment,category,price,addtime,imguid) " +
-            "values(#{id},#{name},#{comment},#{category},#{price},#{addtime},#{imguid})")
+    @Select("SELECT * FROM db_candy.candys WHERE name LIKE CONCAT('%', #{name}, '%')")
+    public List<Candys> findcandysbyname(String name);
+
+
+    @Insert("insert into db_candy.candys(name,comment,category,price,num,addtime,state,imguid) " +
+            "values(#{name},#{comment},#{category},#{price},#{num},#{addtime},#{state},#{imguid})")
     public int insert(Candys candys);
 
-    @Update("update db_candy.candys set name=#{name},comment=#{comment},category=#{category},price=#{price},addtime=#{addtime},imguid=#{imguid} where id=#{id}")
+    @Update("<script>" +
+            "UPDATE db_candy.candys" +
+            "<set>" +
+            "<if test='name != null'>name = #{name},</if>" +
+            "<if test='comment != null'>comment = #{comment},</if>" +
+            "<if test='category != null'>category = #{category},</if>" +
+            "<if test='price != null'>price = #{price},</if>" +
+            "<if test='num != null'>num = #{num},</if>" +
+            "<if test='state != null'>state = #{state},</if>" +
+            "<if test='state == null'>state = 0,</if>" +
+            "<if test='addtime != null'>addtime = #{addtime},</if>" +
+            "<if test='imguid != null'>imguid = #{imguid},</if>" +
+            "</set>" +
+            "WHERE id = #{id}" +
+            "</script>")
     public int update(Candys candys);
+
+    @Update("update db_candy.candys set state=#{state} where id=#{id}")
+    public int updatestate(Candys candys);
 
     @Delete("delete from db_candy.candys where id=#{id}")
     public int delete(Integer id);

@@ -15,6 +15,7 @@ public interface UserInfoMapper {
 
     @Select("select * from user where username=#{username}")
     @Results(id = "UserInfoMap",value = {
+            @Result(property = "id", column = "id"), // 显式映射 id
             @Result(property = "roleList",column = "id",
                     many = @Many(select = "cn.lmu.candy.mapper.UserInfoMapper.findRolesByUserId"
                             ,fetchType = FetchType.EAGER))})
@@ -30,19 +31,22 @@ public interface UserInfoMapper {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public int add(UserInfo user);
 
-    //保存用户信息
-//    @Insert("insert into db_candy.user(username, password, gender, email, telephone, introduce, state, registTime,lastPasswordResetDate)" +
-//            "values (#{username},#{password},#{gender},#{email},#{telephone},#{introduce},#{state},#{registTime},#{lastPasswordResetDate})")
-    @Update("update db_candy.user set username=#{username},gender=#{gender},email=#{email},telephone=#{telephone},introduce=#{introduce},registTime=#{registTime},lastPasswordResetDate=#{lastPasswordResetDate} where id=#{id}")
+    @Update("<script>" +
+            "UPDATE db_candy.user" +
+            "<set>" +
+            "<if test='username != null'>username = #{username},</if>" +
+            "<if test='password != null'>password = #{password},</if>" +
+            "<if test='imguid != null'>imguid = #{imguid},</if>" +
+            "<if test='gender != null'>gender = #{gender},</if>" +
+            "<if test='email != null'>email = #{email},</if>" +
+            "<if test='telephone != null'>telephone = #{telephone},</if>" +
+            "<if test='introduce != null'>introduce = #{introduce},</if>" +
+            "<if test='registTime != null'>registTime = #{registTime},</if>" +
+            "<if test='lastPasswordResetDate != null'>lastPasswordResetDate = #{lastPasswordResetDate},</if>" +
+            "</set>" +
+            "WHERE id = #{id}" +
+            "</script>")
     public int updateUser(UserInfo user);
-
-    //修改账号密码(admin)
-    @Update("update db_candy.user set username=#{username},password=#{password} where id=#{id}")
-    public int updatenamepass(UserInfo user);
-
-    //修改密码(user)
-    @Update("update db_candy.user set password=#{password} where id=#{id}")
-    public int updatepassword(UserInfo user);
 
     //保存用户角色
     @Insert("<script>" +
