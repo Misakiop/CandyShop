@@ -38,9 +38,9 @@ public class MySecurityConfig {
 //                        .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 管理员角色才能访问管理模块
                         // 任何路径都要进行拦截
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
                         // 任何路径都不进行拦截
-//                        .anyRequest().permitAll()
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(myAccessDeniedHandler)
