@@ -16,8 +16,9 @@ public class Candys {
     private String comment;
     private String category;
     private float price;
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    private int num;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date addtime;
-    int state;
-    String imguid;
+    private boolean state;
+    private String imguid;
 }
