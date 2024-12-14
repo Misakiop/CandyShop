@@ -1,13 +1,15 @@
 package cn.lmu.candy.service;
 
+import cn.lmu.candy.domain.Candys;
 import cn.lmu.candy.domain.Role;
 import cn.lmu.candy.domain.UserInfo;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface UserInfoService {
-    public List<UserInfo> findAll();
+    public PageInfo<UserInfo> findAlluser(Integer pageNum, Integer pageSize);
 
     UserInfo findByName(String username);
 
@@ -23,8 +25,5 @@ public interface UserInfoService {
 
     public int deleteUser(Integer id);
 
-    public int updatenamepass(UserInfo user);
-
-    public int updatepassword(UserInfo user);
 
 }

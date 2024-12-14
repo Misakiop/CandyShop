@@ -4,6 +4,8 @@ import cn.lmu.candy.domain.Role;
 import cn.lmu.candy.domain.UserInfo;
 import cn.lmu.candy.mapper.UserInfoMapper;
 import cn.lmu.candy.service.UserInfoService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,11 @@ public class UserInfoServiceImp implements UserInfoService {
     private UserInfoMapper userInfoMapper;
 
     @Override
-    public List<UserInfo> findAll(){
-        return userInfoMapper.findAll();
+    public PageInfo<UserInfo> findAlluser(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserInfo> userInfoList = userInfoMapper.findAll();
+        PageInfo<UserInfo> pageInfo = new PageInfo<>(userInfoList);
+        return pageInfo;
     }
 
     @Override
@@ -53,15 +58,5 @@ public class UserInfoServiceImp implements UserInfoService {
     @Override
     public int deleteUser(Integer id){
         return userInfoMapper.deleteUser(id);
-    }
-
-    @Override
-    public int updatenamepass(UserInfo user){
-        return userInfoMapper.updatenamepass(user);
-    }
-
-    @Override
-    public int updatepassword(UserInfo user){
-        return userInfoMapper.updatepassword(user);
     }
 }
