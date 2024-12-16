@@ -1,9 +1,9 @@
 package cn.lmu.candy.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -11,13 +11,19 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Candys {
-    private int id;
+    private String id;
     private String name;
     private String comment;
     private String category;
     private float price;
     private int num;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String kgs;
+    private String size;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    private Date creationdate;
+    private int expirationdate;
+    private String storagemethod;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
     private Date addtime;
     private boolean state;
     private String imguid;

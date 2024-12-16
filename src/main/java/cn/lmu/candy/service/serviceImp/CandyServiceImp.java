@@ -8,7 +8,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CandyServiceImp implements CandyService {
@@ -25,7 +27,7 @@ public class CandyServiceImp implements CandyService {
     }
 
     @Override
-    public Candys findcandysByid(Integer id) {
+    public Candys findcandysByid(String id) {
         return this.candysMapper.findcandysByid(id);
     }
 
@@ -39,6 +41,12 @@ public class CandyServiceImp implements CandyService {
 
     @Override
     public int insert(Candys candys){
+        // 生成唯一的 UUID 作为商品 ID
+        String id = UUID.randomUUID().toString();
+        candys.setId(id);
+
+        // 设置当前时间为 addtime
+        candys.setAddtime(new Date());
         return this.candysMapper.insert(candys);
     }
 
@@ -48,14 +56,10 @@ public class CandyServiceImp implements CandyService {
     }
 
     @Override
-    public int delete(Integer id){
+    public int delete(String id){
         return this.candysMapper.delete(id);
     }
 
-    @Override
-    public int updatestate(Candys candys){
-        return this.candysMapper.updatestate(candys);
-    }
 
 
 }

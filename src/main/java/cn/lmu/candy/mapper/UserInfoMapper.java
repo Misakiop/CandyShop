@@ -26,8 +26,8 @@ public interface UserInfoMapper {
     UserInfo findById(Integer id);
 
     //注册用户
-    @Insert("insert into `user`(username,password) " +
-            "values(#{username},#{password})")
+    @Insert("insert into `user`(username,password,registTime) " +
+            "values(#{username},#{password},#{registTime})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public int add(UserInfo user);
 

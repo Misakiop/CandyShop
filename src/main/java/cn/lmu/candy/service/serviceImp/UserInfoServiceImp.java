@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,11 +38,18 @@ public class UserInfoServiceImp implements UserInfoService {
 
     @Override
     public int add(UserInfo user){
+        // 设置RegistTime为当前时间
+        user.setRegistTime(new Date());
         return userInfoMapper.add(user);
     }
 
     @Override
     public int updateUser(UserInfo user){
+        // 判断 password 是否有新值
+        if (user.getPassword() != null) {
+            // 设置 lastPasswordResetDate 为当前时间
+            user.setLastPasswordResetDate(new Date());
+        }
         return userInfoMapper.updateUser(user);
     }
 
