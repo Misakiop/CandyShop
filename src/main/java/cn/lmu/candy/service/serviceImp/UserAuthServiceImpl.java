@@ -6,6 +6,7 @@ import cn.lmu.candy.security.JwtTokenUtil;
 import cn.lmu.candy.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -66,6 +67,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
+    @Cacheable(cacheNames = "userCache", key = "'userByUsername_' + #username", unless = "#result == null")
     public UserInfo findByUsername(String username) {
         return this.userInfoMapper.findByName(username);
     }
