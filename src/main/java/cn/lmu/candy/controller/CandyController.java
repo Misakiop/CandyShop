@@ -23,7 +23,7 @@ public class CandyController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseData<PageInfo<Candys>> getCandyList(
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize)
+            @RequestParam(value = "pageSize", required = false, defaultValue = "12") Integer pageSize)
     {
         ResponseData<PageInfo<Candys>> responseData = new ResponseData<>();
 
@@ -94,7 +94,7 @@ public class CandyController {
      * @return
      */
     @RequestMapping(value = "/selectbyid/{id}", method = RequestMethod.GET)
-    public ResponseData<Candys> getById(@PathVariable("id") Integer id) {
+    public ResponseData<Candys> getById(@PathVariable("id") String id) {
         ResponseData<Candys> responseData = new ResponseData<>();
 
         try {

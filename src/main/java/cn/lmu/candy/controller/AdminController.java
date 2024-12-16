@@ -60,7 +60,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "/updateshop", method = RequestMethod.PUT)
-    public ResponseData<Candys> updateCandy(@RequestParam("id") Integer id, @RequestBody Candys candy) {
+    public ResponseData<Candys> updateCandy(@RequestParam("id") String id, @RequestBody Candys candy) {
         ResponseData<Candys> responseData = new ResponseData<>();
 
         try {
@@ -93,51 +93,12 @@ public class AdminController {
     }
 
     /**
-     * 修改商品状态
-     * @param id
-     * @param candy
-     * @return
-     */
-    @RequestMapping(value = "/updatestate", method = RequestMethod.PUT)
-    public ResponseData<Candys> updateCandystate(@RequestParam("id") Integer id, @RequestBody Candys candy) {
-        ResponseData<Candys> responseData = new ResponseData<>();
-
-        try {
-            // 设置ID，确保传入的candys对象包含正确的ID
-            candy.setId(id);
-
-            // 调用服务层更新数据
-            int result = candyService.updatestate(candy);
-
-            if (result > 0) {
-                // 你可以考虑通过ID重新查询最新的数据并返回
-                responseData.setData(candy); // 更新成功后返回更新的对象
-                responseData.setSuccess(true);
-                responseData.setCode(200);
-                responseData.setMsg("修改成功");
-            } else {
-                responseData.setSuccess(false);
-                responseData.setCode(400);
-                responseData.setMsg("修改失败");
-            }
-        } catch (Exception e) {
-            // 异常处理，返回500错误
-            responseData.setSuccess(false);
-//            responseData.setCode(500);
-            responseData.setMsg("服务器错误: " + e.getMessage());
-            // 可以在这里添加日志记录
-        }
-
-        return responseData;
-    }
-
-    /**
      * 删除商品数据
      * @param id
      * @return
      */
     @RequestMapping(value = "/deleteshop/{id}", method = RequestMethod.DELETE)
-    public ResponseData<Void> deleteCandy(@PathVariable("id") Integer id) {
+    public ResponseData<Void> deleteCandy(@PathVariable("id") String id) {
         ResponseData<Void> responseData = new ResponseData<>();
 
         try {
