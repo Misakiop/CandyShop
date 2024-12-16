@@ -34,13 +34,15 @@ public class MySecurityConfig {
                 .csrf(csrf -> csrf.disable()) // 关闭 CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/file/**").permitAll()
+                        .requestMatchers("/api/cart/**").permitAll()
 //                        .requestMatchers("/api/candy/**").permitAll()
 //                        .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // 管理员角色才能访问管理模块
                         // 任何路径都要进行拦截
-//                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                         // 任何路径都不进行拦截
-                        .anyRequest().permitAll()
+//                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(myAccessDeniedHandler)
