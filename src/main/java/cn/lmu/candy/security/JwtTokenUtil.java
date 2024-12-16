@@ -17,6 +17,7 @@ public class JwtTokenUtil implements Serializable {
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
     private static final String CLAIM_KEY_ROLE = "auth";
+    private static final String CLAIM_KEY_ID = "id";  // 用于存储用户ID
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.expiration}")
@@ -31,6 +32,7 @@ public class JwtTokenUtil implements Serializable {
         }
         return username;
     }
+
     public Date getCreatedDateFromToken(String token) {
         Date created;
         try {
@@ -50,6 +52,17 @@ public class JwtTokenUtil implements Serializable {
             expiration = null;
         }
         return expiration;
+    }
+    // 从Token中提取用户ID（int 类型）
+    public int getIdFromToken(String token) {
+        int userId = 0;  // 默认值为0
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            userId = (Integer) claims.get(CLAIM_KEY_ID);  // 提取用户ID（int 类型）
+        } catch (Exception e) {
+            userId = 0;  // 出错时返回0
+        }
+        return userId;
     }
     private Claims getClaimsFromToken(String token) {
         Claims claims;
@@ -77,6 +90,7 @@ public class JwtTokenUtil implements Serializable {
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userInfo.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
+        claims.put(CLAIM_KEY_ID, userInfo.getId());  // 将用户ID添加到Claims中（int 类型）
         String strRole="";
         if (userInfo.getRoleList().size()>0){
             for (Role r:userInfo.getRoleList()) {

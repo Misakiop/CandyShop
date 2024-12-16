@@ -44,7 +44,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             final String authToken = authHeader.substring(tokenHead.length()); // The part after "Bearer "
             if (authToken.length()>0 && jwtTokenUtil.validateToken(authToken)){
                 String userName = jwtTokenUtil.getUsernameFromToken(authToken);
+                int userId = jwtTokenUtil.getIdFromToken(authToken);  // 提取用户ID（int 类型）
                 logger.info("checking authentication " + userName);
+                logger.info("User ID: " + userId);
                 if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     //如果令牌有效，且未设置当前用户认证凭证，则为用户构造认证凭证（发一个访问通行证）
                     UserInfo userInfo =  this.userAuthService.findByUsername(userName);
