@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/file")
+@RequestMapping("/api/file")
 public class FileRestController {
     @Value("${upload.path}")
     private String uploadPath;
