@@ -123,40 +123,4 @@ public class AdminController {
         return responseData;
     }
 
-//    用户部分--------------------------------------------------------------------------------
-
-    /**
-     * 修改用户
-     * @param id
-     * @param userInfo
-     * @return
-     */
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseData<UserInfo> updateUserInfo(@RequestParam("id") Integer id, @RequestBody UserInfo userInfo) {
-        ResponseData<UserInfo> responseData = new ResponseData<>();
-
-        try {
-            // 确保 userInfo 对象包含 id
-            userInfo.setId(id);
-            int result = userInfoService.updateUser(userInfo);
-
-            if (result > 0) {
-                responseData.setData(userInfo); // 更新成功后返回更新的对象
-                responseData.setSuccess(true);
-                responseData.setCode(200);
-                responseData.setMsg("修改成功");
-            } else {
-                responseData.setSuccess(false);
-                responseData.setCode(400);
-                responseData.setMsg("修改失败");
-            }
-        } catch (Exception e) {
-            responseData.setSuccess(false);
-            responseData.setCode(500);
-            responseData.setMsg("服务器错误: " + e.getMessage());
-        }
-
-        return responseData;
-    }
-
 }
