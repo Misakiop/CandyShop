@@ -18,6 +18,9 @@ public class FileRestController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    @Value("${upload.url}")
+    private String uploadUrl;
+
     @PostMapping("/uploadPicture")
     public ResponseData uploadPicture(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
         ResponseData responseData = new ResponseData();
@@ -44,7 +47,7 @@ public class FileRestController {
             file.transferTo(tempFile);
 
             // 返回上传结果
-            String fileUrl = "http://121.40.60.41:8008/" + filename; // 假设 URL 映射
+            String fileUrl = uploadUrl + filename; // 假设 URL 映射
             responseData.setSuccess(true);
             responseData.setCode(200);
             responseData.setMsg("图片上传成功！");
