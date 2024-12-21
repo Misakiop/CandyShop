@@ -7,7 +7,7 @@ public class ResponseData<T> {
     private T data;        //服务器响应数据
     private boolean success; //请求是否成功
     private String msg;       // 错误信息
-    private int code = -1;   // 状态码
+    private int code = 200;   // 状态码
     private long timestamp; //服务器响应时间
 
     public ResponseData() {
