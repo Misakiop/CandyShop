@@ -1,6 +1,5 @@
 package cn.lmu.candy.service;
 
-import cn.lmu.candy.domain.Candys;
 import cn.lmu.candy.domain.Role;
 import cn.lmu.candy.domain.UserInfo;
 import com.github.pagehelper.PageInfo;
@@ -24,6 +23,8 @@ public interface UserInfoService {
     public List<Role> findRolesByUserId(int userId);
 
     public int deleteUser(Integer id);
+
+    public void clearuserCache();
 
 
 }

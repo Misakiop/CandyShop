@@ -2,14 +2,11 @@ package cn.lmu.candy.controller;
 
 import cn.lmu.candy.domain.ResponseData;
 import cn.lmu.candy.domain.UserInfo;
-import cn.lmu.candy.security.MyPasswordEncoder;
 import cn.lmu.candy.service.UserInfoService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 用户API接口
@@ -114,6 +111,41 @@ public class UserInfoController {
     }
 
     /**
+     * 修改用户
+     * @param id
+     * @param userInfo
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseData<UserInfo> updateUserInfo(@RequestParam("id") Integer id, @RequestBody UserInfo userInfo) {
+        ResponseData<UserInfo> responseData = new ResponseData<>();
+
+        try {
+            // 确保 userInfo 对象包含 id
+            userInfo.setId(id);
+            int result = userInfoService.updateUser(userInfo);
+
+            if (result > 0) {
+                responseData.setData(userInfo); // 更新成功后返回更新的对象
+                responseData.setSuccess(true);
+                responseData.setCode(200);
+                responseData.setMsg("修改成功");
+            } else {
+                responseData.setSuccess(false);
+                responseData.setCode(400);
+                responseData.setMsg("修改失败");
+            }
+        } catch (Exception e) {
+            responseData.setSuccess(false);
+            responseData.setCode(500);
+            responseData.setMsg("服务器错误: " + e.getMessage());
+        }
+
+        return responseData;
+    }
+
+
+    /**
      * 删除数据
      * @param id
      * @return
@@ -140,6 +172,25 @@ public class UserInfoController {
 //            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
             // 可以在这里添加日志记录
+        }
+
+        return responseData;
+    }
+
+    /**
+     * 清除所有缓存条目
+     * @return ResponseData
+     */
+    @DeleteMapping("/clearCache")
+    @CacheEvict(cacheNames = "userCache", allEntries = true)
+    public ResponseData<String> clearuserCache() {
+        ResponseData<String> responseData = new ResponseData<>();
+
+        try {
+            // 清除缓存的操作由 @CacheEvict 注解自动处理
+            responseData.ok("刷新成功",200);
+        } catch (Exception e) {
+            responseData.fail(500,"服务异常");
         }
 
         return responseData;

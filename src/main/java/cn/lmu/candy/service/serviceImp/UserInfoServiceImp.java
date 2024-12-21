@@ -9,7 +9,6 @@ import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +50,7 @@ public class UserInfoServiceImp implements UserInfoService {
     }
 
     @Override
-    @CachePut(cacheNames = "userCache", key = "'userById_' + #user.id")
+    @CacheEvict(cacheNames = "userCache", allEntries = true)
     public int updateUser(UserInfo user){
         // 判断 password 是否有新值
         if (user.getPassword() != null) {
@@ -62,7 +61,7 @@ public class UserInfoServiceImp implements UserInfoService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "userCache", allEntries = true) // 清除所有缓存
+    @CacheEvict(cacheNames = "userCache", allEntries = true)
     public int addUserRole(@Param("user") UserInfo user){
         return userInfoMapper.addUserRole(user);
     }
@@ -74,8 +73,14 @@ public class UserInfoServiceImp implements UserInfoService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "userCache", key = "'userById_' + #id") // 清除单个用户缓存
+    @CacheEvict(cacheNames = "userCache", allEntries = true)
     public int deleteUser(Integer id){
         return userInfoMapper.deleteUser(id);
+    }
+
+    @Override
+    @CacheEvict(cacheNames = "userCache", allEntries = true)
+    public void clearuserCache() {
+        // 清除所有缓存条目
     }
 }

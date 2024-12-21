@@ -6,6 +6,7 @@ import cn.lmu.candy.security.JwtTokenUtil;
 import cn.lmu.candy.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Value("Bearer")
     private String tokenHead;
     @Override
+    @CacheEvict(cacheNames = "userCache", allEntries = true)
     public UserInfo register(UserInfo userToAdd) {
         //如果注册时对密码进行加密保存，则后续登录验证时要使用同样的加密规则
         //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -67,7 +69,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     }
 
     @Override
-    @Cacheable(cacheNames = "userCache", key = "'userByUsername_' + #username", unless = "#result == null")
+    @Cacheable(cacheNames = "userFindByUsername", key = "'userByUsername_' + #username", unless = "#result == null")
     public UserInfo findByUsername(String username) {
         return this.userInfoMapper.findByName(username);
     }

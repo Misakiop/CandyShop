@@ -37,6 +37,7 @@ public interface UserInfoMapper {
             "<if test='username != null'>username = #{username},</if>" +
             "<if test='password != null'>password = #{password},</if>" +
             "<if test='imguid != null'>imguid = #{imguid},</if>" +
+            "<if test='address != null'>address = #{address},</if>" +
             "<if test='gender != null'>gender = #{gender},</if>" +
             "<if test='email != null'>email = #{email},</if>" +
             "<if test='telephone != null'>telephone = #{telephone},</if>" +
