@@ -18,9 +18,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/file")
 public class FileRestController {
-    @Value("${upload.path}")
-    private String uploadPath;
-
     @Value("${upload.url}")
     private String uploadUrl;
 
@@ -44,9 +41,19 @@ public class FileRestController {
             // 生成唯一文件名
             String filename = UUID.randomUUID().toString() + suffix;
 
-            // 创建文件夹并保存文件
-            File tempFile = new File(uploadPath, filename);
-            Files.createDirectories(tempFile.getParentFile().toPath());
+            // 获取当前 JAR 文件所在目录
+            String currentDir = System.getProperty("user.dir");  // 获取当前工作目录
+            String uploadDir = currentDir + "/img";  // 拼接 img 目录
+
+            // 确保上传目录存在
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs();  // 如果不存在，则创建目录
+            }
+
+            // 创建目录并保存文件
+            File tempFile = new File(uploadDir, filename);
+            Files.createDirectories(tempFile.getParentFile().toPath());  // 确保目录存在
             file.transferTo(tempFile);
 
             // 返回上传结果

@@ -39,16 +39,25 @@ public class OrderServiceImpl implements OrderService {
 
             // 检查库存是否足够
             if (item.getBuyNum() > num) {
-                // 如果库存不足，抛出一个业务异常，或者返回失败
                 throw new InsufficientStockException("商品 " + item.getCandys().getName() + " 库存不足");
             }
         }
 
         if(this.orderMapper.add(order)>0){//向Order表添加订单
             //下一步向OrderItem表插入本次订单具体购买产品信息
+            System.out.println("Inserting Order: " + order.getId());
             for(OrderItem item:order.getOrderItemList()){
+                System.out.println("Inserting OrderItem: " + item);
+
                 item.setOrder(order);
                 //逐一向订单明细orderItem表插入订单明细
+                int rows = this.orderItemMapper.add(item);
+                System.out.println("Rows affected: " + rows);
+
+                if (rows <= 0) {
+                    throw new RuntimeException("Order item insertion failed.");
+                }
+
                 this.orderItemMapper.add(item);
                 //更新该产品的库存或销量
                 this.candyMapper.updateCnum(item);
@@ -57,7 +66,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return false;
     }
-
 
     @Override
     public PageInfo<Order> findByUserId(Integer pageNum, Integer pageSize, Integer id) {

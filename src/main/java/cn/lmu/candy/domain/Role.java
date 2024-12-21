@@ -11,4 +11,9 @@ public class Role {
     private int id;
     private String roleName; //角色名
     private String roleDesc; //角色描述
+
+    @Override
+    public String toString() {
+        return "Role{id=" + id + ", roleName='" + roleName + "', roleDesc='" + roleDesc + "'}";
+    }
 }

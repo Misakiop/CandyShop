@@ -29,4 +29,9 @@ public class UserInfo {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastPasswordResetDate;
     private String token;
+
+    @Override
+    public String toString() {
+        return "UserInfo{id=" + id + ", username='" + username + "', telephone='" + telephone + "', state=" + state + ", address='" + address + "', token='" + token + "'}";
+    }
 }

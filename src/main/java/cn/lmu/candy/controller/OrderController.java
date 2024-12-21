@@ -77,7 +77,7 @@ public class OrderController {
 
         // 检查购物车是否为空
         if (cart == null || cart.getCartItemVoList().isEmpty()) {
-            return ResponseData.fail("购物车空空如也，请先选购产品");
+            return ResponseData.fail(403,"购物车空空如也，请先选购产品");
         }
 
         // 设置订单相关信息
@@ -113,9 +113,10 @@ public class OrderController {
         } catch (InsufficientStockException ex) {
             // 捕获库存不足的异常并返回相关信息
             return ResponseData.fail(402,ex.getMessage());
-        } catch (Exception ex) {
-            // 捕获其他异常并返回通用错误信息
-            return ResponseData.fail(500,"提交订单失败，请联系客服");
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Log exception
+            throw new RuntimeException("Order creation failed", e);
         }
     }
 

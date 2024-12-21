@@ -37,8 +37,8 @@ public class CandyController {
             @RequestParam(value = "pageSize", required = false, defaultValue = "12") Integer pageSize,
             Candys candys, HttpServletRequest request) {
 
-        System.out.println("Candys object: " + candys);
-        System.out.println("Candys name: " + candys.getName());
+//        System.out.println("Candys object: " + candys);
+//        System.out.println("Candys name: " + candys.getName());
 //        System.out.println("Candys category: " + candys.getCategory());
 
         // 调用 service 层获取分页数据

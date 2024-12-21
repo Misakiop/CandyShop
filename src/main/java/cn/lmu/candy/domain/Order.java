@@ -26,4 +26,8 @@ public class Order {
     private UserInfo userInfo; //一个订单对应一个下单用户，1对1关系
     private List<OrderItem> orderItemList; //一个订单对应多个订单明细，1对多关系
 
+    @Override
+    public String toString() {
+        return "Order{id='" + id + "', money=" + money + ", receiverAddress='" + receiverAddress + "', receiverName='" + receiverName + "', receiverPhone='" + receiverPhone + "', orderTime=" + orderTime + ", payState=" + payState + ", orderState=" + orderState + ", userInfo=" + (userInfo != null ? userInfo.getId() : null) + ", orderItemListSize=" + (orderItemList != null ? orderItemList.size() : 0) + "}";
+    }
 }

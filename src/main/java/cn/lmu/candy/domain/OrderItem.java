@@ -18,4 +18,8 @@ public class OrderItem {
     private int buyNum;
     private float buyPrice;
 
+    @Override
+    public String toString() {
+        return "OrderItem{id=" + id + ", candysId=" + (candys != null ? candys.getId() : null) + ", buyNum=" + buyNum + ", buyPrice=" + buyPrice + "}";
+    }
 }
