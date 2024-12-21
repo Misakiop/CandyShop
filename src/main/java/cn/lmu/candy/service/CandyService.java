@@ -3,8 +3,6 @@ package cn.lmu.candy.service;
 import cn.lmu.candy.domain.Candys;
 import com.github.pagehelper.PageInfo;
 
-import java.util.List;
-
 public interface CandyService {
 
     public PageInfo<Candys> findByWhere(Integer pageNum, Integer pageSize,Candys candys);
@@ -23,10 +21,6 @@ public interface CandyService {
 
     public void clearCandysCache();
 
-
     //    public PageInfo<Candys> findAllcandys(Integer pageNum, Integer pageSize);
     //    public PageInfo<Candys> UserfindAllcandys(Integer pageNum, Integer pageSize);
-
-
-
 }

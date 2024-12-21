@@ -27,10 +27,8 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-
     private final String CART_PREKEY = "Cart-";
     private final String USER_PREKEY = "User-";
-
 
     // 从请求头获取JWT Token
     private String getTokenFromRequest(HttpServletRequest request) {
@@ -40,8 +38,6 @@ public class CartServiceImpl implements CartService {
         }
         return null; // 如果没有找到JWT Token，返回null
     }
-
-
     // 根据请求获取用户信息
     public UserInfo getUser(HttpServletRequest request) {
         String token = getTokenFromRequest(request);
@@ -61,7 +57,6 @@ public class CartServiceImpl implements CartService {
 
         return userInfo;
     }
-
 
     @Override
     public boolean add(CartItemDto cartItemDto, HttpServletRequest request) {
@@ -83,7 +78,6 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-
     @Override
     public boolean update(CartItemDto cartItemDto, HttpServletRequest request) {
         try {
@@ -95,7 +89,6 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-
     @Override
     public boolean delete(String[] idArray, HttpServletRequest request) {
         try {
@@ -106,7 +99,6 @@ public class CartServiceImpl implements CartService {
             return false;
         }
     }
-
 
     @Override
     public boolean clear(HttpServletRequest request) {
@@ -163,7 +155,6 @@ public class CartServiceImpl implements CartService {
             return new PageInfo<>(new ArrayList<>());
         }
     }
-
 
     //普通获取购物车（前端无用到）
     @Override

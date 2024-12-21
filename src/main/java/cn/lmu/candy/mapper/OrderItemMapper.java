@@ -1,6 +1,5 @@
 package cn.lmu.candy.mapper;
 
-import cn.lmu.candy.domain.Candys;
 import cn.lmu.candy.domain.OrderItem;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;

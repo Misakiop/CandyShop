@@ -2,7 +2,6 @@ package cn.lmu.candy.controller;
 
 import cn.lmu.candy.domain.Candys;
 import cn.lmu.candy.domain.ResponseData;
-import cn.lmu.candy.domain.UserInfo;
 import cn.lmu.candy.service.CandyService;
 import cn.lmu.candy.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;

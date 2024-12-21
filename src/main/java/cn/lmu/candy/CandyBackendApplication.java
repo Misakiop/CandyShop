@@ -23,7 +23,6 @@ import java.time.Duration;
 @EnableCaching
 @SpringBootApplication
 public class CandyBackendApplication implements CommandLineRunner {
-
     @Autowired
     private RedisConnectionTest redisConnectionTest;
 

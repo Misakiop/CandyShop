@@ -144,7 +144,6 @@ public class UserInfoController {
         return responseData;
     }
 
-
     /**
      * 删除数据
      * @param id
@@ -195,6 +194,4 @@ public class UserInfoController {
 
         return responseData;
     }
-
-
 }

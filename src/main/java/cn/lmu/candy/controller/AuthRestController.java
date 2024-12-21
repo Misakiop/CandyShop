@@ -54,7 +54,6 @@ public class AuthRestController {
         return responseData;
     }
 
-
     @CrossOrigin(origins = "*")
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request)
@@ -67,7 +66,6 @@ public class AuthRestController {
             return ResponseEntity.ok(new Token(refreshedToken));
         }
     }
-
 
     /**
      * 注册

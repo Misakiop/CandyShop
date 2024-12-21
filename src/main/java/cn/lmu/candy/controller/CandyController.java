@@ -26,6 +26,7 @@ public class CandyController {
 
     @Autowired
     private CategoryService categoryService;
+
     /**
      * 分页获取全部数据
      * @return
@@ -105,8 +106,6 @@ public class CandyController {
         return responseData;
     }
 
-
-
     /**
      * 分页名称查找商品
      * @param name
@@ -118,8 +117,7 @@ public class CandyController {
     public ResponseData<PageInfo<Candys>> getByName(
             @PathVariable("name") String name,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") Integer pageNum,
-            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize)
-    {
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         ResponseData<PageInfo<Candys>> responseData = new ResponseData<>();
 
         try {
@@ -143,7 +141,6 @@ public class CandyController {
 
         return responseData;
     }
-
 
     /**
      * 用户分页名称查找商品
@@ -181,7 +178,6 @@ public class CandyController {
 
         return responseData;
     }
-
 
     /**
      * 通过id获取数据

@@ -12,6 +12,9 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.UUID;
 
+/**
+ * 图片上传接口
+ */
 @RestController
 @RequestMapping("/api/file")
 public class FileRestController {

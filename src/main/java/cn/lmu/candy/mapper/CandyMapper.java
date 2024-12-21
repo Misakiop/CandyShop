@@ -16,7 +16,6 @@ public interface CandyMapper {
     @Select("SELECT * FROM db_candy.candys WHERE (state = 1 OR state = 2)")
     public List<Candys> UserfindAllcandys();
 
-
     @Select("select * from db_candy.candys where id=#{id}")
     @Results(id = "CandyMap",value = {
             @Result(property = "id", column = "id"),

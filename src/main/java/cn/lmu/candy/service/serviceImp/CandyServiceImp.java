@@ -20,7 +20,6 @@ import java.util.UUID;
 public class CandyServiceImp implements CandyService {
     @Autowired
     private CandyMapper candysMapper;
-
     @Autowired
     private CacheManager cacheManager;
 
@@ -174,8 +173,6 @@ public class CandyServiceImp implements CandyService {
         return this.candysMapper.delete(id);
     }
 
-
-
 //    public PageInfo<Candys> findAllcandys(Integer pageNum, Integer pageSize) {
 //        //开启分页
 //        PageHelper.startPage(pageNum,pageSize);
@@ -233,9 +230,5 @@ public class CandyServiceImp implements CandyService {
 //        PageInfo<Candys> pageInfo = new PageInfo<>(candys);
 //        return pageInfo;
 //    }
-
-
-
-
 
 }
