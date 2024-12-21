@@ -6,12 +6,14 @@ import cn.lmu.candy.service.CandyService;
 import cn.lmu.candy.service.CartService;
 import cn.lmu.candy.service.UserAuthService;
 import cn.lmu.candy.utils.RedisUtils;
-import jakarta.servlet.http.Cookie;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -68,7 +70,7 @@ public class CartServiceImpl implements CartService {
         //先判定购物车中是否已存在该产品的购物记录
         Object obj = redisUtils.hget(CART_PREKEY + String.valueOf(userInfo.getId()), cartItemDto.getPid());
         try {
-            if (obj != null) {//如果已存在，曾更新修改购物车数量
+            if (obj != null) {//如果已存在，则更新修改购物车数量
                 CartItemDto cartItemDtoOld = (CartItemDto) obj;
                 cartItemDtoOld.setBuyNum(cartItemDtoOld.getBuyNum() + cartItemDto.getBuyNum());
                 redisUtils.hset(CART_PREKEY + String.valueOf(userInfo.getId()), cartItemDtoOld.getPid(), cartItemDtoOld);
@@ -117,37 +119,96 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    @Override
+    public PageInfo<CartItemVo> getPagedCart(HttpServletRequest request, Integer pageNum, Integer pageSize) {
+        try {
+            UserInfo userInfo = this.getUser(request);
+            // 从 Redis 中获取用户购物车所有数据
+            Map<Object, Object> cartItems = redisUtils.hgetall(CART_PREKEY + String.valueOf(userInfo.getId()));
+            List<CartItemVo> cartItemVoList = new ArrayList<>();
 
+            // 将购物车条目转换为 CartItemVo
+            for (Object value : cartItems.values()) {
+                CartItemDto cartItemDto = (CartItemDto) value;
+                Candys candys = candyService.findcandysByid(cartItemDto.getPid());
+
+                CartItemVo cartItemVo = new CartItemVo();
+                cartItemVo.setCandys(candys);
+                cartItemVo.setBuyNum(cartItemDto.getBuyNum());
+                cartItemVo.setBuyPrice(cartItemDto.getBuyPrice());
+                cartItemVoList.add(cartItemVo);
+            }
+//------------------------------------------------------------------------------------------------//
+//              方法1进行手动分页
+//             谁家好人给购物车分页的？
+//            // 手动进行分页
+//            int start = (pageNum - 1) * pageSize;
+//            int end = Math.min(start + pageSize, cartItemVoList.size());
+//            List<CartItemVo> pageList = cartItemVoList.subList(start, end);
+//
+//            // 创建 PageInfo 并返回
+//            PageInfo<CartItemVo> pageInfo = new PageInfo<>(pageList);
+//            pageInfo.setTotal(cartItemVoList.size());  // 设置总数
+//            return pageInfo;
+//------------------------------------------------------------------------------------------------//
+
+            //方法2不进行分页因为似乎获取购物车缓存的数据绕过了自动分页
+            // 使用 PageHelper 分页，确保分页在获取的数据上生效
+            PageHelper.startPage(pageNum, pageSize);
+            // 返回分页结果
+            return new PageInfo<>(cartItemVoList);
+//------------------------------------------------------------------------------------------------//
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new PageInfo<>(new ArrayList<>());
+        }
+    }
+
+
+    //普通获取购物车（前端无用到）
     @Override
     public Cart getCart(HttpServletRequest request) {
         try {
             UserInfo userInfo = this.getUser(request);
-            // 创建⼀个CartItemDto的空对象 ，⽬的是⽤来接从redis取到的数据
             CartItemDto cartItemDto;
-            // 从redis中根据⽤户Id获取到购物车⾥的数据
+            // 从Redis中获取购物车数据
             Map<Object, Object> cartItems = redisUtils.hgetall(CART_PREKEY + String.valueOf(userInfo.getId()));
-            // 创建⼀个数组将所有的Vo对象都接出来返回到前端
+
+            // 创建一个列表用于保存购物车项
             ArrayList<CartItemVo> cartItemVos = new ArrayList<>();
-            //遍历map中的值 每⼀个value都是⼀个CarItemDto对象
+
+            // 遍历Redis获取到的购物车项
             for (Object value : cartItems.values()) {
-                // 为了获取到cartItem中的get⽅法，我们必须要将它强转成为⼀个CartItemDto来接住数据
                 cartItemDto = (CartItemDto) value;
                 Candys candys = candyService.findcandysByid(cartItemDto.getPid());
-                // 这⾥vo对象接住Dto中的所有数据并补充Product属性数据，然后返回给前端
+
+                // 将每个购物车项转换成CartItemVo并添加到列表中
                 CartItemVo cartItemVo = new CartItemVo();
                 cartItemVo.setCandys(candys);
                 cartItemVo.setBuyNum(cartItemDto.getBuyNum());
                 cartItemVo.setBuyPrice(cartItemDto.getBuyPrice());
                 cartItemVos.add(cartItemVo);
             }
+
+            // 如果购物车没有任何商品，返回null
+            if (cartItemVos.isEmpty()) {
+                return null;
+            }
+
+            // 创建一个Cart对象并设置相关属性
             Cart cart = new Cart();
             cart.setUserInfo(userInfo);
             cart.setCartItemVoList(cartItemVos);
+
+            // 计算购物车的总金额和总数量
             cart.setTotalMoney(cart.getTotalMoney());
             cart.setTotalNum(cart.getTotalNum());
+
             return cart;
         } catch (Exception ex) {
+            // 捕获异常并返回null
             return null;
         }
     }
+
 }
