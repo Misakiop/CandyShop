@@ -1,6 +1,8 @@
 package cn.lmu.candy.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +12,11 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Candys {
     private String id;
     private String name;
     private String comment;
-    private String category;
     private float price;
     private int num;
     private String kgs;
@@ -25,6 +27,7 @@ public class Candys {
     private String storagemethod;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+8")
     private Date addtime;
-    private boolean state;
+    private int state;
     private String imguid;
+    private Category category;
 }
