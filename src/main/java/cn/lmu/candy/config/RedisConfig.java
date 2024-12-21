@@ -3,6 +3,7 @@ package cn.lmu.candy.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -42,6 +43,12 @@ public class RedisConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         // 设置可见性，所有属性均可序列化
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+
+        // 启用 Hibernate5Module 来处理 Hibernate 代理类
+        Hibernate5Module hibernate5Module = new Hibernate5Module();
+        hibernate5Module.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, true); // 可选，取决于需要
+        objectMapper.registerModule(hibernate5Module);
+
         // 启用默认类型信息，以支持多态对象的反序列化
         objectMapper.activateDefaultTyping(
                 objectMapper.getPolymorphicTypeValidator(),
