@@ -6,6 +6,7 @@ import cn.lmu.candy.service.OrderService;
 import com.github.pagehelper.PageInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -209,6 +210,25 @@ public class OrderController {
 //            responseData.setCode(500);
             responseData.setMsg("服务器错误: " + e.getMessage());
             // 可以在这里添加日志记录
+        }
+
+        return responseData;
+    }
+
+    /**
+     * 清除所有缓存条目
+     * @return ResponseData
+     */
+    @DeleteMapping("/clearCache")
+    @CacheEvict(cacheNames = "orderCache", allEntries = true)
+    public ResponseData<String> clearorderCache() {
+        ResponseData<String> responseData = new ResponseData<>();
+
+        try {
+            // 清除缓存的操作由 @CacheEvict 注解自动处理
+            responseData.ok("刷新成功",200);
+        } catch (Exception e) {
+            responseData.fail(500,"服务异常");
         }
 
         return responseData;

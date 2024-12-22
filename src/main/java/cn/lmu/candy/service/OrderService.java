@@ -14,4 +14,5 @@ public interface OrderService {
 
     public int delete(String id);
 
+    public void clearCandysCache();
 }

@@ -29,15 +29,15 @@ public class CandyServiceImp implements CandyService {
         PageHelper.startPage(pageNum, pageSize);
         List<Candys> candysList = candysMapper.findByWhere(candys);
         for (Candys candy : candysList){
-            if (candy.getState() != 0 &&candy.getNum() <= 0){
+            if (candy.getState() == 1 &&candy.getNum() <= 0){
                 //如果库存小于等于0，更新商品状态为缺货
                 candy.setState(2);
                 candysMapper.update(candy);
                 // 手动更新缓存中的数据
                 clearCandysCache();
             }
-            if (candy.getState() != 0 &&candy.getNum() > 0){
-                //如果库存小于等于0，更新商品状态为缺货
+            if (candy.getState() == 2 &&candy.getNum() > 0){
+                //如果库存大于0，更新商品状态为上架
                 candy.setState(1);
                 candysMapper.update(candy);
                 // 手动更新缓存中的数据
@@ -53,14 +53,14 @@ public class CandyServiceImp implements CandyService {
         PageHelper.startPage(pageNum, pageSize);
         List<Candys> candysList = candysMapper.findByWhereUser(candys);
         for (Candys candy : candysList) {
-            if (candy.getState() != 0 && candy.getNum() <= 0) {
+            if (candy.getState() == 1 && candy.getNum() <= 0) {
                 // 如果库存小于等于0，更新商品状态为缺货
                 candy.setState(2);
                 candysMapper.update(candy);
                 // 手动更新缓存中的数据
                 clearCandysCache();
             }
-            if (candy.getState() != 0 && candy.getNum() > 0) {
+            if (candy.getState() == 2 && candy.getNum() > 0) {
                 // 如果库存大于0，更新商品状态为在售
                 candy.setState(1);
                 candysMapper.update(candy);

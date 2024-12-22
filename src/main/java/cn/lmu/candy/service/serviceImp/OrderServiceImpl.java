@@ -11,6 +11,9 @@ import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     //创建订单
     @Override
     @Transactional
-//    @CacheEvict(cacheNames = "candysCache", allEntries = true)
+    @CachePut(cacheNames = "orderCache", key = "'orderCreate' ")
     public boolean createOrder(Order order) {
         String oid = NanoIdUtils.randomNanoId();
         order.setId(oid);
@@ -68,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(cacheNames = "orderCache", key = "'orderByUserId_' + #id", unless = "#result == null")
     public PageInfo<Order> findByUserId(Integer pageNum, Integer pageSize, Integer id) {
         PageHelper.startPage(pageNum, pageSize);
         List<Order> order = orderMapper.findByUserId(id);
@@ -76,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable(cacheNames = "orderCache", key = "'order_'+#pageNum+'_'+#pageSize")
     public PageInfo<Order> getAll(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Order> order = orderMapper.findAll();
@@ -84,16 +89,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "orderCache", allEntries = true)
     public int update(Order order){
         return this.orderMapper.update(order);
     }
 
     @Override
+    @CacheEvict(cacheNames = "orderCache", allEntries = true)
     public int delete(String id){
         return this.orderMapper.delete(id);
     }
 
-
+    @Override
+    @CacheEvict(cacheNames = "orderCache", allEntries = true)
+    public void clearCandysCache() {
+        // 清除所有缓存条目
+    }
 
 
 
