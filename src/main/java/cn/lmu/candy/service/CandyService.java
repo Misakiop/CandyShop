@@ -3,10 +3,17 @@ package cn.lmu.candy.service;
 import cn.lmu.candy.domain.Candys;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 public interface CandyService {
 
     public PageInfo<Candys> findByWhere(Integer pageNum, Integer pageSize,Candys candys);
     public PageInfo<Candys> findByWhereUser(Integer pageNum, Integer pageSize,Candys candys);
+
+    public PageInfo<Candys> findCandysWhereByName(Integer pageNum, Integer pageSize,Candys candys);
+    public PageInfo<Candys> findCandysWhereByNameUser(Integer pageNum, Integer pageSize,Candys candys);
+
+    public PageInfo<Candys> findCandysWhereByCate(Integer pageNum, Integer pageSize,Candys candys);
 
     public PageInfo<Candys> findcandysbyname(Integer pageNum, Integer pageSize,String name);
     public PageInfo<Candys> Userfindcandysbyname(Integer pageNum, Integer pageSize,String name);

@@ -173,6 +173,33 @@ public class CandyServiceImp implements CandyService {
         return this.candysMapper.delete(id);
     }
 
+    @Override
+    @Cacheable(cacheNames = "candysCache", key = "'candysByname_'+#pageNum+'_'+#pageSize")
+    public PageInfo<Candys> findCandysWhereByName(Integer pageNum, Integer pageSize,Candys candys){
+        PageHelper.startPage(pageNum, pageSize);
+        List<Candys> candysList = candysMapper.findByWhere(candys);
+        PageInfo<Candys> pageInfo = new PageInfo<>(candysList);
+        return pageInfo;
+    }
+    @Override
+    @Cacheable(cacheNames = "candysCache", key = "'candysBynameUser_'+#pageNum+'_'+#pageSize")
+    public PageInfo<Candys> findCandysWhereByNameUser(Integer pageNum, Integer pageSize,Candys candys){
+        PageHelper.startPage(pageNum, pageSize);
+        List<Candys> candysList = candysMapper.findByWhereUser(candys);
+        PageInfo<Candys> pageInfo = new PageInfo<>(candysList);
+        return pageInfo;
+    }
+
+    @Override
+    @Cacheable(cacheNames = "candysCache", key = "'candysByCate_'+#pageNum+'_'+#pageSize")
+    public PageInfo<Candys> findCandysWhereByCate(Integer pageNum, Integer pageSize,Candys candys){
+        PageHelper.startPage(pageNum, pageSize);
+        List<Candys> candysList = candysMapper.findByWhere(candys);
+        PageInfo<Candys> pageInfo = new PageInfo<>(candysList);
+        return pageInfo;
+    }
+
+
 //    public PageInfo<Candys> findAllcandys(Integer pageNum, Integer pageSize) {
 //        //开启分页
 //        PageHelper.startPage(pageNum,pageSize);
